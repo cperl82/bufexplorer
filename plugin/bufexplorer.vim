@@ -343,7 +343,7 @@ function! StartBufExplorer(open)
     if !has("win32")
         " On non-Windows boxes, escape the name so that is shows up correctly.
         let name = escape(name, "[]")
-        call s:BEError("Escaped")
+        "call s:BEError("Escaped")
     endif
 
     " Make sure there is only one explorer open at a time.
