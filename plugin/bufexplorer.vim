@@ -417,7 +417,12 @@ function! s:BEDisplayBufferList()
   call s:BEMapKeys()
   call setline(1, s:BECreateHelp())
   call s:BEBuildBufferList()
-  call cursor(s:firstBufferLine, 1)
+
+  if g:bufExplorerJumpToCurBufLine
+    call search(s:bufExplorerCurBufRegex)
+  else
+    call cursor(s:firstBufferLine, 1)
+  endif
 
   if !g:bufExplorerResize
     normal! zz
@@ -478,9 +483,10 @@ function! s:BESetupSyntax()
     syn match bufExplorerLockedBuf    /^\s*\d\+.\{3}[\-=].*/
     syn match bufExplorerHidBuf       /^\s*\d\+.\{2}h.*/
     syn match bufExplorerActBuf       /^\s*\d\+.\{2}a.*/
-    syn match bufExplorerCurBuf       /^\s*\d\+.%.*/
     syn match bufExplorerAltBuf       /^\s*\d\+.#.*/
     syn match bufExplorerUnlBuf       /^\s*\d\+u.*/
+
+    exec printf("syn match bufExplorerCurBuf /%s/", s:bufExplorerCurBufRegex)
 
     hi def link bufExplorerBufNbr Number
     hi def link bufExplorerMapping NonText
@@ -1146,6 +1152,7 @@ call s:BESet("g:bufExplorerSplitRight", &splitright)  " Should vertical splits b
 call s:BESet("g:bufExplorerSplitBelow", &splitbelow)  " Should horizontal splits be below or above current window?
 call s:BESet("g:bufExplorerShowTabBuffer", 0)         " Show only buffer(s) for this tab?
 call s:BESet("g:bufExplorerOnlyOneTab", 1)            " If ShowTabBuffer = 1, only store the most recent tab for this buffer.
+call s:BESet("g:bufExplorerJumpToCurBufLine", 0)      " If 1, jump the cursor to the line with the current buffer
 
 " Global variables {{{1
 call s:BEReset()
@@ -1157,6 +1164,7 @@ let s:splitMode = ""
 let s:name = '[BufExplorer]'
 let s:refreshBufferList = 1
 let s:MRU_Exclude_List = ["[BufExplorer]","__MRU_Files__"]
+let s:bufExplorerCurBufRegex = '^\s*\d\+.%.*'
 "1}}}
 
 " vim:ft=vim foldmethod=marker sw=2
