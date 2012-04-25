@@ -841,8 +841,7 @@ function! s:BERemoveBuffer(type, mode) range
             "        \s* - optional whitespace
             "        \zs - start the match here
             "        \d\+ - any digits
-            "        \> - end of word (so it can't make 100 or 201)
-            let bufNbr = matchstr(line, '^\s*\zs\d\+\>')
+            let bufNbr = matchstr(line, '^\s*\zs\d\+')
 
             " Add 0 to bufNbr to ensure Vim treats it as a Number
             " for use with the getbufvar() function
@@ -881,8 +880,7 @@ function! s:BEDeleteBuffer(bufNbr, mode)
         "        ^ - Starting at the beginning of the string
         "        \s* - optional whitespace
         "        \(10\|20\) - either a 10 or a 20
-        "        \> - end of word (so it can't make 100 or 201)
-        exec 'silent! g/^\s*\('.substitute(a:bufNbr, ' ', '\\|', 'g').'\)\>/d_'
+        exec 'silent! g/^\s*\('.substitute(a:bufNbr, ' ', '\\|', 'g').'\)/d_'
 
         setlocal nomodifiable
 
